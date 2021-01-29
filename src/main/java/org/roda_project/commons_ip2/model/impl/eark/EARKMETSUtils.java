@@ -394,6 +394,24 @@ public final class EARKMETSUtils {
     return file;
   }
 
+  public static FileType addDataFileToMETS(MetsWrapper representationMETS, String dataFilePath) {
+    FileType file = new FileType();
+    file.setID(Utils.generateRandomAndPrefixedUUID());
+
+    // add to file section
+    FLocat fileLocation = METSUtils.createFileLocation(dataFilePath);
+    file.getFLocat().add(fileLocation);
+    representationMETS.getDataFileGroup().getFile().add(file);
+
+    // add to struct map
+    if (representationMETS.getDataDiv().getFptr().isEmpty()) {
+      Fptr fptr = new Fptr();
+      fptr.setFILEID(representationMETS.getDataFileGroup());
+      representationMETS.getDataDiv().getFptr().add(fptr);
+    }
+    return file;
+  }
+
   public static FileType addSchemaFileToMETS(MetsWrapper metsWrapper, String schemaFilePath, Path schemaFile)
     throws IPException, InterruptedException {
     FileType file = new FileType();

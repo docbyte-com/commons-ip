@@ -8,6 +8,7 @@
 package org.roda_project.commons_ip2.model.impl.eark;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -202,14 +203,19 @@ public final class EARKUtils {
           throw new InterruptedException();
         }
 
-        String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
-          + file.getFileName();
-        FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
+        //TODO: if representation data has a network protocol do not copy the content inside the SIP
+        if (URI.create(file.getPath().toString()).getScheme() != null){
+          String dataFilePath = file.getPath().toString();
+          EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath);
+        } else {
+          String dataFilePath = IPConstants.DATA_FOLDER + ModelUtils.getFoldersFromList(file.getRelativeFolders())
+              + file.getFileName();
+          FileType fileType = EARKMETSUtils.addDataFileToMETS(representationMETSWrapper, dataFilePath, file.getPath());
 
-        dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
-          + dataFilePath;
-        ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
-
+          dataFilePath = IPConstants.REPRESENTATIONS_FOLDER + representationId + IPConstants.ZIP_PATH_SEPARATOR
+              + dataFilePath;
+          ZIPUtils.addFileTypeFileToZip(zipEntries, file.getPath(), dataFilePath, fileType);
+        }
         i++;
         if (ip instanceof SIP) {
           ((SIP) ip).notifySipBuildRepresentationProcessingCurrentStatus(i);
@@ -720,8 +726,11 @@ public final class EARKUtils {
                     ValidationConstants.REPRESENTATION_FILE_FOUND_WITH_MATCHING_CHECKSUMS, ip.getBasePath(), filePath);
                 }
               } else {
-                ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
-                  ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+                //TODO:Verify if path has a protocol
+                if(URI.create(fLocat.getHref()).getScheme() != null){
+                  ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_NOT_FOUND,
+                      ValidationEntry.LEVEL.ERROR, ip.getBasePath(), filePath);
+                }
               }
             } else {
               ValidationUtils.addIssue(ip.getValidationReport(), ValidationConstants.REPRESENTATION_FILE_HAS_NO_FLOCAT,

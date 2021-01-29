@@ -7,6 +7,8 @@
  */
 package org.roda_project.commons_ip2.model;
 
+import org.roda_project.commons_ip2.mets_v1_12.beans.FileType;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -25,6 +27,7 @@ public class IPFile implements Serializable {
   private String checksum = "";
   private String checksumAlgorithm = "";
   private List<String> relatedTags;
+  private FileType fileType;
 
   public IPFile(Path path) {
     super();
@@ -122,6 +125,14 @@ public class IPFile implements Serializable {
   public IPFile setRelatedTags(List<String> relatedTags) {
     this.relatedTags = relatedTags;
     return this;
+  }
+
+  public FileType getFileType() {
+    return fileType;
+  }
+
+  public void setFileType(FileType fileType) {
+    this.fileType = fileType;
   }
 
   @Override
