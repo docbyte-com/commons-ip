@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -43,8 +44,6 @@ import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.ValidationEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.xml.bind.DatatypeConverter;
 
 public final class Utils {
   private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);

@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import jakarta.xml.bind.DatatypeConverter;
+import javax.xml.bind.DatatypeConverter;
 
 import org.roda_project.commons_ip2.validator.model.pyip.Checksum;
 import org.roda_project.commons_ip2.validator.model.pyip.ChecksumAlg;

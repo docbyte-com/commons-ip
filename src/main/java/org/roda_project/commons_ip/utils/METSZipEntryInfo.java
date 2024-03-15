@@ -12,9 +12,9 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
+import javax.xml.bind.JAXBException;
 
-import jakarta.xml.bind.JAXBException;
+import org.roda_project.commons_ip.mets_v1_11.beans.Mets;
 
 public class METSZipEntryInfo extends FileZipEntryInfo {
   private Mets mets;
