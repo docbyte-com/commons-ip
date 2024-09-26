@@ -630,6 +630,18 @@ public final class ConstantsCSIPspec {
     + "representation level METS document this value records the name/ID of the "
     + "representation, i.e. the name of the top-level representation folder.";
 
+  public static final String VALIDATION_REPORT_SPECIFICATION_CSIP1_220_DESCRIPTION = "The mets/@OBJID attribute is " +
+    "mandatory, its value is a string identifier for the METS document. "
+    + "For the package METS document following CSIPSTR2, "
+    + "this should be the name/ID of the package, i.e. the name of the "
+    + "package root folder. For a representation level METS document this "
+    + "value records the name/ID of the representation following CSIPSTR10, "
+    + "i.e. the name of the top-level representation folder. Observe that the "
+    + "name/ID used in the mets/@OBJID attribute might not be possible to directly "
+    + "transform into a folder name due to limitations in the used file system. "
+    + "If there are illegal characters present there are different character mapping "
+    + "techniques to use to transform the mets/@OBJID into a valid folder name.";
+
   /**
    * Constant specification cardinality for id "CSIP1".
    */

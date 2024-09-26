@@ -6,7 +6,7 @@
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip2</artifactId>
     <packaging>jar</packaging>
-    <version>2.7.0-SNAPSHOT</version>
+    <version>2.9.0-SNAPSHOT</version>
     <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
         E-ARK, BagIt,
         Hungarian SIP 4, etc.
@@ -50,7 +50,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_version>17</java_version>
-        <version.jackson>2.16.1</version.jackson>
+        <version.jackson>2.17.1</version.jackson>
     </properties>
 
     <profiles>
@@ -322,7 +322,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.0</version>
+            <version>1.5.6</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -338,7 +338,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.15.1</version>
+            <version>2.16.1</version>
         </dependency>
         <dependency>
             <groupId>gov.loc</groupId>
@@ -348,7 +348,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-configuration2</artifactId>
-            <version>2.9.0</version>
+            <version>2.11.0</version>
         </dependency>
         <dependency>
             <!-- needed for commons-configuration2 -->
@@ -379,7 +379,7 @@
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
-            <version>4.7.5</version>
+            <version>4.7.6</version>
         </dependency>
 
         <!-- Java11 dependencies -->
@@ -396,7 +396,7 @@
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.4</version>
+            <version>4.0.5</version>
         </dependency>
 
         <!-- PyIP dependencies -->

@@ -77,6 +77,9 @@ public final class IPConstants {
   // SIP Specification
   public static final String SIP_SPEC_PROFILE = "https://earksip.dilcis.eu/profile/E-ARK-SIP.xml";
 
+  // AIP Specification
+  public static final String AIP_SPEC_PROFILE = "https://earkaip.dilcis.eu/profile/E-ARK-AIP.xml";
+
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
   public static final String RODA_DIV_LABEL = "RODA";
@@ -120,6 +123,8 @@ public final class IPConstants {
   public static final String SCHEMA_EARK_SIP_FILENAME = "DILCISExtensionSIPMETS.xsd";
   public static final String SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_EARK_SIP_FILENAME;
+
+  public static final String SIP_FILE_EXTENSION = ".zip";
 
   /** Private empty constructor */
   private IPConstants() {
