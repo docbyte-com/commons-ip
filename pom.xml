@@ -6,7 +6,7 @@
     <groupId>org.roda-project</groupId>
     <artifactId>commons-ip2</artifactId>
     <packaging>jar</packaging>
-    <version>2.6.2.db</version>
+    <version>2.6.2.javax</version>
     <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
         E-ARK, BagIt,
         Hungarian SIP 4, etc.
@@ -21,12 +21,6 @@
     </organization>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>artifacts-snapshot-docbyte-com-docbyte-mvn-snapshot</id>
-            <url>
-                https://artifacts-snapshot-docbyte-com-518241560725.d.codeartifact.eu-west-1.amazonaws.com/maven/docbyte-mvn-snapshot/
-            </url>
-        </snapshotRepository>
         <repository>
             <id>artifacts-beta-docbyte-com-docbyte-mvn-beta</id>
             <url>
