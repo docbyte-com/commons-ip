@@ -10,15 +10,15 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.7.0
+        uses: s4u/setup-maven-action@v1.18.0
         with:
           java-version: 17
           java-distribution: temurin
           maven-version: 3.9.4
       - name: Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
