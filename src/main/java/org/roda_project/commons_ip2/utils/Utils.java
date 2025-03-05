@@ -19,19 +19,15 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.roda_project.commons_ip.utils.METSEnums;
@@ -127,7 +123,7 @@ public final class Utils {
     }
 
     try {
-      Files.delete(path);
+      FileUtils.deleteDirectory(path.toFile());
 
     } catch (DirectoryNotEmptyException e) {
       LOGGER.debug("Directory is not empty. Going to delete its content as well.");
@@ -140,8 +136,19 @@ public final class Utils {
           }
 
           @Override
+          public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+            Objects.requireNonNull(file);
+            LOGGER.error("File {} delete filed: {}", file.getFileName(), exc);
+            throw exc;
+          }
+          @Override
           public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            try {
             Files.delete(dir);
+            } catch (DirectoryNotEmptyException e) {
+              LOGGER.debug("Directory is still not empty. Going to delete its content again.");
+              deletePath(dir);
+            }
             return FileVisitResult.CONTINUE;
           }
 
