@@ -264,10 +264,14 @@ public abstract class EARKMETSCreator {
     agent.setOTHERROLE(ipAgent.getOtherRole());
     agent.setTYPE(ipAgent.getType().toString());
     agent.setOTHERTYPE(ipAgent.getOtherType());
-    final MetsType.MetsHdr.Agent.Note note = new MetsType.MetsHdr.Agent.Note();
-    note.setValue(ipAgent.getNote());
-    note.setNOTETYPE(ipAgent.getNoteType().asString());
-    agent.getNote().add(note);
+
+    if(ipAgent.getNote() != null) {
+      final MetsType.MetsHdr.Agent.Note note = new MetsType.MetsHdr.Agent.Note();
+      note.setValue(ipAgent.getNote());
+      note.setNOTETYPE(ipAgent.getNoteType().asString());
+      agent.getNote().add(note);
+    }
+
     return agent;
   }
 
