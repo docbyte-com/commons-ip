@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import org.roda_project.commons_ip.utils.FileZipEntryInfo;
 import org.roda_project.commons_ip.utils.IPException;
@@ -63,13 +63,13 @@ public class METSZipEntryInfo extends FileZipEntryInfo {
   }
 
   @Override
-  public void prepareEntryforZipping() throws IPException {
+  public void prepareEntryForZipping() throws IPException {
     try {
       METSUtils.marshallMETS(mets, getFilePath(), rootMETS);
       if (!rootMETS && fileType != null) {
         METSUtils.setFileBasicInformation(LOGGER, getFilePath(), fileType);
 
-        String checksumType = IPConstants.CHECKSUM_ALGORITHM;
+        String checksumType = this.getChecksum();
         Set<String> checksumAlgorithms = new HashSet<>();
         checksumAlgorithms.add(checksumType);
         try (InputStream inputStream = Files.newInputStream(getFilePath())) {

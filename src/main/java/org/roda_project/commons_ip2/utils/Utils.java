@@ -18,11 +18,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import javax.xml.bind.DatatypeConverter;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +36,8 @@ import org.roda_project.commons_ip2.model.IPInterface;
 import org.roda_project.commons_ip2.model.ValidationEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.xml.bind.DatatypeConverter;
 
 public final class Utils {
     private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
@@ -151,17 +153,16 @@ public final class Utils {
         return DatatypeConverter.printHexBinary(digester.digest());
     }
 
-    public static List<String> getFileRelativeFolders(Path basePath, Path filePath) {
-        List<String> res = new ArrayList<>();
-        Path relativize = basePath.relativize(filePath).getParent();
-        if (relativize != null) {
-            Iterator<Path> iterator = relativize.iterator();
-            while (iterator.hasNext()) {
-                res.add(iterator.next().toString());
-            }
-        }
-        return res;
+  public static List<String> getFileRelativeFolders(Path basePath, Path filePath) {
+    List<String> res = new ArrayList<>();
+    Path relativize = basePath.relativize(filePath).getParent();
+    if (relativize != null) {
+      for (Path path : relativize) {
+        res.add(path.toString());
+      }
     }
+    return res;
+  }
 
     public static Optional<IPFileInterface> validateFile(IPInterface ip, Path filePath, List<String> fileRelativeFolders,
                                                          String metsChecksum, String metsChecksumAlgorithm, String metsElementId) {

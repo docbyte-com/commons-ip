@@ -27,7 +27,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.roda_project.commons_ip.model.ParseException;
@@ -58,27 +58,29 @@ public final class ZIPUtils {
    *          file extension (e.g. .zip)
    */
   public static Path extractIPIfInZipFormat(final Path source, Path destinationDirectory) throws ParseException {
-    Path ipFolderPath = destinationDirectory;
-    if (!Files.isDirectory(source)) {
-      try {
-        ZIPUtils.unzip(source, destinationDirectory);
+    if (Files.isDirectory(source)) {
+      return source;
+    }
 
-        // 20161111 hsilva: see if the IP extracted has a folder which contains
-        // the content of the IP (for being compliant with previous way of
-        // creating SIP in ZIP format, this test/adjustment is needed)
-        if (Files.exists(destinationDirectory) && !Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
-          try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(destinationDirectory)) {
-            for (Path path : directoryStream) {
-              if (Files.isDirectory(path) && Files.exists(path.resolve(IPConstants.METS_FILE))) {
-                ipFolderPath = path;
-                break;
-              }
+    Path ipFolderPath = destinationDirectory;
+    try {
+      ZIPUtils.unzip(source, destinationDirectory);
+
+      // 20161111 hsilva: see if the IP extracted has a folder which contains
+      // the content of the IP (for being compliant with previous way of
+      // creating SIP in ZIP format, this test/adjustment is needed)
+      if (Files.exists(destinationDirectory) && !Files.exists(destinationDirectory.resolve(IPConstants.METS_FILE))) {
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(destinationDirectory)) {
+          for (Path path : directoryStream) {
+            if (Files.isDirectory(path) && Files.exists(path.resolve(IPConstants.METS_FILE))) {
+              ipFolderPath = path;
+              break;
             }
           }
         }
-      } catch (IOException e) {
-        throw new ParseException("Error unzipping file", e);
       }
+    } catch (IOException e) {
+      throw new ParseException("Error unzipping file", e);
     }
 
     return ipFolderPath;
@@ -128,7 +130,9 @@ public final class ZIPUtils {
         throw new InterruptedException();
       }
 
-      file.prepareEntryforZipping();
+      file.setChecksum(sip.getChecksum());
+      file.prepareEntryForZipping();
+
 
       LOGGER.debug("Zipping file {}", file.getFilePath());
       ZipEntry entry;
@@ -142,9 +146,8 @@ public final class ZIPUtils {
 
       try (InputStream inputStream = Files.newInputStream(file.getFilePath());) {
         Map<String, String> checksums;
-        if (file instanceof METSZipEntryInfo) {
+        if (file instanceof METSZipEntryInfo metsEntry) {
           checksums = calculateChecksums(Optional.of(zos), inputStream, metsChecksumAlgorithms);
-          METSZipEntryInfo metsEntry = (METSZipEntryInfo) file;
           metsEntry.setChecksums(checksums);
           metsEntry.setSize(metsEntry.getFilePath().toFile().length());
         } else {
@@ -156,12 +159,10 @@ public final class ZIPUtils {
         String checksumType = sip.getChecksum();
         file.setChecksum(checksum);
         file.setChecksumAlgorithm(checksumType);
-        if (file instanceof METSFileTypeZipEntryInfo) {
-          METSFileTypeZipEntryInfo f = (METSFileTypeZipEntryInfo) file;
+        if (file instanceof METSFileTypeZipEntryInfo f) {
           f.getMetsFileType().setCHECKSUM(checksum);
           f.getMetsFileType().setCHECKSUMTYPE(checksumType);
-        } else if (file instanceof METSMdRefZipEntryInfo) {
-          METSMdRefZipEntryInfo f = (METSMdRefZipEntryInfo) file;
+        } else if (file instanceof METSMdRefZipEntryInfo f) {
           f.getMetsMdRef().setCHECKSUM(checksum);
           f.getMetsMdRef().setCHECKSUMTYPE(checksumType);
         }
@@ -224,7 +225,11 @@ public final class ZIPUtils {
         if (Utils.systemIsWindows()) {
           entryName = entryName.replaceAll("/", "\\\\");
         }
-        Path newFile = dest.resolve(entryName);
+        Path newFile = dest.resolve(entryName).normalize();
+
+        if (!newFile.startsWith(dest.normalize())) {
+          throw new IOException("Bad zip entry: " + entryName);
+        }
 
         if (zipEntry.isDirectory()) {
           Files.createDirectories(newFile);

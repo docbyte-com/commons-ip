@@ -10,7 +10,8 @@ import java.util.concurrent.Callable;
 import org.roda_project.commons_ip2.cli.model.args.MetadataGroup;
 import org.roda_project.commons_ip2.cli.model.args.RepresentationGroup;
 import org.roda_project.commons_ip2.cli.model.enums.CSIPVersion;
-import org.roda_project.commons_ip2.cli.model.enums.Checksum;
+import org.roda_project.commons_ip2.cli.model.enums.ChecksumAlgorithm;
+import org.roda_project.commons_ip2.cli.model.enums.WriteStrategyEnum;
 import org.roda_project.commons_ip2.cli.model.exception.CLIException;
 import org.roda_project.commons_ip2.cli.model.exception.InvalidPathException;
 import org.roda_project.commons_ip2.cli.model.exception.SIPBuilderException;
@@ -47,7 +48,7 @@ public class Create implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-v",
     "--version"}, description = "E-ARK SIP specification version (possible values: ${COMPLETION-CANDIDATES})")
-  CSIPVersion version = CSIPVersion.V210;
+  CSIPVersion version = CSIPVersion.V220;
 
   @CommandLine.Option(names = {"-p", "--path"}, arity = "1", description = "Path where the E-ARK SIP should be saved")
   String path = System.getProperty("user.dir");
@@ -67,11 +68,14 @@ public class Create implements Callable<Integer> {
 
   @CommandLine.Option(names = {"-C",
     "--checksum"}, paramLabel = "<algorithm>", description = "Checksum algorithms (possible values: ${COMPLETION-CANDIDATES})")
-  Checksum checksum = Checksum.SHA256;
+  ChecksumAlgorithm checksumAlgorithm = ChecksumAlgorithm.SHA256;
 
   @CommandLine.Option(names = {"-d",
     "--documentation"}, description = "Path(s) to documentation file(s)", split = ",", paramLabel = "<path>", showDefaultValue = CommandLine.Help.Visibility.NEVER)
   List<String> documentation = new ArrayList<>();
+
+  @CommandLine.Option(names = {"-s", "--strategy"}, description = "Write strategy to be used (possible values: ${COMPLETION-CANDIDATES})")
+  WriteStrategyEnum strategy = WriteStrategyEnum.ZIP;
 
   @Override
   public Integer call() throws CLIException, InvalidPathException, SIPBuilderException, InterruptedException {
@@ -98,13 +102,13 @@ public class Create implements Callable<Integer> {
     CommandLine cmd = spec.commandLine();
     String commandLineString = String.join(" ", cmd.getParseResult().originalArgs());
     LogSystem.logOperatingSystemInfo();
-    LOGGER.debug("command executed: " + commandLineString);
+    LOGGER.debug("command executed: {}", commandLineString);
 
     final Path sipPath = new SIPBuilder().setMetadataArgs(metadataListArgs).setOverride(overrideSchema)
       .setRepresentationArgs(representationListArgs).setTargetOnly(targetOnly).setSipId(sipId).setAncestors(ancestors)
       .setDocumentation(documentation).setSoftwareVersion(getClass().getPackage().getImplementationVersion())
       .setPath(path).setSubmitterAgentId(submitterAgentId).setSubmitterAgentName(submitterAgentName)
-      .setChecksum(checksum).setVersion(version).build();
+      .setChecksum(checksumAlgorithm).setVersion(version).setWriteStrategy(strategy).build();
 
     new CommandLine(this).getOut().printf("E-ARK SIP created at '%s'%n", sipPath.normalize().toAbsolutePath());
 

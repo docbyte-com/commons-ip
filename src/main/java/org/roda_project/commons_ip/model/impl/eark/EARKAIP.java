@@ -18,7 +18,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.xml.bind.DatatypeConverter;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.NullOutputStream;
@@ -168,7 +168,7 @@ public class EARKAIP extends AIPWrap {
           throw new InterruptedException();
         }
 
-        zipEntryInfo.prepareEntryforZipping();
+        zipEntryInfo.prepareEntryForZipping();
         LOGGER.debug("Writing file {}", zipEntryInfo.getFilePath());
         final Path outputPath = Paths.get(path.toString(), zipEntryInfo.getName());
         writeFileToPath(zipEntryInfo, outputPath, onlyMets);

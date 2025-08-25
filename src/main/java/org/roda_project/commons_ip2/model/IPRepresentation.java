@@ -30,6 +30,9 @@ public class IPRepresentation {
   private List<IPAgent> agents;
   private List<IPDescriptiveMetadata> descriptiveMetadata;
   private List<IPMetadata> preservationMetadata;
+  private List<IPMetadata> technicalMetadata;
+  private List<IPMetadata> sourceMetadata;
+  private List<IPMetadata> rightsMetadata;
   private List<IPMetadata> otherMetadata;
   private List<IPFileInterface> data;
   private List<IPFileInterface> schemas;
@@ -46,6 +49,9 @@ public class IPRepresentation {
     this.agents = new ArrayList<>();
     this.descriptiveMetadata = new ArrayList<>();
     this.preservationMetadata = new ArrayList<>();
+    this.technicalMetadata = new ArrayList<>();
+    this.sourceMetadata = new ArrayList<>();
+    this.rightsMetadata = new ArrayList<>();
     this.otherMetadata = new ArrayList<>();
     this.data = new ArrayList<>();
     this.schemas = new ArrayList<>();
@@ -151,6 +157,33 @@ public class IPRepresentation {
     return this;
   }
 
+  public List<IPMetadata> getTechnicalMetadata() {
+    return technicalMetadata;
+  }
+
+  public IPRepresentation addTechnicalMetadata(IPMetadata metadata) {
+    technicalMetadata.add(metadata);
+    return this;
+  }
+
+  public List<IPMetadata> getSourceMetadata() {
+    return sourceMetadata;
+  }
+
+  public IPRepresentation addSourceMetadata(IPMetadata metadata) {
+    sourceMetadata.add(metadata);
+    return this;
+  }
+
+  public List<IPMetadata> getRightsMetadata() {
+    return rightsMetadata;
+  }
+
+  public IPRepresentation addRightsMetadata(IPMetadata metadata) {
+    rightsMetadata.add(metadata);
+    return this;
+  }
+
   public List<IPMetadata> getOtherMetadata() {
     return otherMetadata;
   }
@@ -198,8 +231,10 @@ public class IPRepresentation {
       + createDate + ", modificationDate=" + modificationDate + ", contentType=" + contentType
       + ", contentInformationType=" + contentInformationType + ", status=" + status + ", description=" + description
       + ", agents=" + agents + ", descriptiveMetadata=" + descriptiveMetadata + ", preservationMetadata="
-      + preservationMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data + ", schemas=" + schemas
-      + ", documentation=" + documentation + "]";
+      + preservationMetadata + ", technicalMetadata=" + technicalMetadata + ", sourceMetadata=" + sourceMetadata 
+      + ", rightsMetadata=" + rightsMetadata + ", otherMetadata=" + otherMetadata + ", data=" + data 
+      + ", schemas=" + schemas + ", documentation=" + documentation 
+      + "]";
   }
 
 }

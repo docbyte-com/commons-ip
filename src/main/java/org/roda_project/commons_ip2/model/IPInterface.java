@@ -7,6 +7,7 @@
  */
 package org.roda_project.commons_ip2.model;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPEnums.IPType;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.model.impl.eark.out.writers.strategy.WriteStrategy;
 
 public interface IPInterface {
 
@@ -77,6 +79,12 @@ public interface IPInterface {
 
   IPInterface addPreservationMetadata(IPMetadata preservationMetadata) throws IPException;
 
+  IPInterface addTechnicalMetadata(IPMetadata technicalMetadata) throws IPException;
+
+  IPInterface addSourceMetadata(IPMetadata sourceMetadata) throws IPException;
+
+  IPInterface addRightsMetadata(IPMetadata rightsMetadata) throws IPException;
+
   IPInterface addOtherMetadata(IPMetadata otherMetadata) throws IPException;
 
   IPInterface addRepresentation(IPRepresentation representation) throws IPException;
@@ -93,6 +101,9 @@ public interface IPInterface {
   IPInterface addPreservationMetadataToRepresentation(String representationID, IPMetadata preservationMetadata)
     throws IPException;
 
+  IPInterface addRightsMetadataToRepresentation(String representationID, IPMetadata rightsMetadata)
+    throws IPException;
+
   IPInterface addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws IPException;
 
   IPInterface addFileToRepresentation(String representationID, IPFileInterface file) throws IPException;
@@ -106,6 +117,12 @@ public interface IPInterface {
   List<IPDescriptiveMetadata> getDescriptiveMetadata();
 
   List<IPMetadata> getPreservationMetadata();
+
+  List<IPMetadata> getTechnicalMetadata();
+
+  List<IPMetadata> getSourceMetadata();
+
+  List<IPMetadata> getRightsMetadata();
 
   List<IPMetadata> getOtherMetadata();
 
@@ -123,24 +140,19 @@ public interface IPInterface {
 
   IPHeader getHeader();
 
-  /**
-   * @param destinationDirectory
-   *          directory where the SIP will be placed into
-   * @throws InterruptedException
-   */
-  Path build(Path destinationDirectory) throws IPException, InterruptedException;
+  Path build(WriteStrategy writeStrategy) throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, boolean onlyManifest) throws IPException, InterruptedException;
+  Path build(WriteStrategy writeStrategy, boolean onlyManifest) throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension) throws IPException, InterruptedException;
+  Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension) throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, IPEnums.SipType sipType)
+  Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension, IPEnums.SipType sipType)
     throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest)
+  Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension, boolean onlyManifest)
     throws IPException, InterruptedException;
 
-  Path build(Path destinationDirectory, String fileNameWithoutExtension, boolean onlyManifest, IPEnums.SipType sipType)
+  Path build(WriteStrategy writeStrategy, String fileNameWithoutExtension, boolean onlyManifest, IPEnums.SipType sipType)
     throws IPException, InterruptedException;
 
   static IPInterface parse(Path source) throws ParseException {

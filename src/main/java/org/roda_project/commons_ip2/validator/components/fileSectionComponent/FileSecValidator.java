@@ -3,12 +3,12 @@ package org.roda_project.commons_ip2.validator.components.fileSectionComponent;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.xml.namespace.QName;
 
@@ -25,6 +25,7 @@ import org.roda_project.commons_ip2.validator.reporter.ReporterDetails;
 import org.roda_project.commons_ip2.validator.state.MetsValidatorState;
 import org.roda_project.commons_ip2.validator.state.StructureValidatorState;
 import org.roda_project.commons_ip2.validator.utils.CHECKSUMTYPE;
+import org.roda_project.commons_ip2.validator.utils.DecoderUtils;
 import org.roda_project.commons_ip2.validator.utils.Message;
 
 /**
@@ -97,7 +98,8 @@ public abstract class FileSecValidator {
             final List<FileType.FLocat> fLocats = file.getFLocat();
             if (structureValidatorState.isZipFileFlag()) {
               for (FileType.FLocat flocat : fLocats) {
-                final String href = URLDecoder.decode(flocat.getHref(), Constants.UTF_8);
+                final String href = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()),
+                  StandardCharsets.UTF_8);
                 final StringBuilder filePath = new StringBuilder();
                 if (metsValidatorState.isRootMets()) {
                   filePath.append(metsValidatorState.getMets().getOBJID()).append(Constants.SEPARATOR).append(href);
@@ -114,7 +116,8 @@ public abstract class FileSecValidator {
               }
             } else {
               for (FileType.FLocat flocat : fLocats) {
-                final String filePath = URLDecoder.decode(flocat.getHref(), Constants.UTF_8);
+                final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()),
+                  StandardCharsets.UTF_8);
                 if (!structureValidatorState.getFolderManager()
                   .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
                   message.append("mets/fileSec/fileGrp[@USE=’Documentation’] ")
@@ -150,7 +153,7 @@ public abstract class FileSecValidator {
           final List<FileType.FLocat> fLocats = file.getFLocat();
           if (structureValidatorState.isZipFileFlag()) {
             for (FileType.FLocat flocat : fLocats) {
-              final String href = URLDecoder.decode(flocat.getHref(), Constants.UTF_8);
+              final String href = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()), StandardCharsets.UTF_8);
               final StringBuilder filePath = new StringBuilder();
               if (metsValidatorState.isRootMets()) {
                 filePath.append(metsValidatorState.getMets().getOBJID()).append(Constants.SEPARATOR).append(href);
@@ -167,7 +170,7 @@ public abstract class FileSecValidator {
             }
           } else {
             for (FileType.FLocat flocat : fLocats) {
-              final String filePath = URLDecoder.decode(flocat.getHref(), Constants.UTF_8);
+              final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()), StandardCharsets.UTF_8);
               if (!structureValidatorState.getFolderManager()
                 .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
                 message.append("mets/fileSec/fileGrp[@USE=’Schemas’] ")
@@ -201,7 +204,7 @@ public abstract class FileSecValidator {
           final List<FileType.FLocat> fLocats = file.getFLocat();
           if (structureValidatorState.isZipFileFlag()) {
             for (FileType.FLocat flocat : fLocats) {
-              final String href = URLDecoder.decode(flocat.getHref(), Constants.UTF_8);
+              final String href = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()), StandardCharsets.UTF_8);
               final StringBuilder filePath = new StringBuilder();
               if (metsValidatorState.isRootMets()) {
                 filePath.append(metsValidatorState.getMets().getOBJID()).append(Constants.SEPARATOR).append(href);
@@ -218,7 +221,7 @@ public abstract class FileSecValidator {
             }
           } else {
             for (FileType.FLocat flocat : fLocats) {
-              final String filePath = URLDecoder.decode(flocat.getHref(), Constants.UTF_8);
+              final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(flocat.getHref()), StandardCharsets.UTF_8);
               if (!structureValidatorState.getFolderManager()
                 .checkPathExists(Paths.get(metsValidatorState.getMetsPath()).resolve(filePath))) {
                 message.append("mets/fileSec/fileGrp[@USE=’Representations’] ")
@@ -448,7 +451,8 @@ public abstract class FileSecValidator {
           final List<FileType.FLocat> fLocats = file.getFLocat();
           if (!fLocats.isEmpty()) {
             for (FileType.FLocat fLocat : fLocats) {
-              final String hrefDecoded = URLDecoder.decode(fLocat.getHref(), Constants.UTF_8);
+              final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(fLocat.getHref()),
+                  StandardCharsets.UTF_8);
               final StringBuilder filePath = new StringBuilder();
               if (structureValidatorState.isZipFileFlag()) {
                 if (metsValidatorState.isRootMets()) {
@@ -470,7 +474,7 @@ public abstract class FileSecValidator {
     }
     if (metsValidatorState.getMetsFiles().containsValue(false) && metsValidatorState.isRootMets()) {
       return new ReporterDetails(getCSIPVersion(),
-        Message.createErrorMessage("You have files in SIP does not referenced in %1$s",
+        Message.createErrorMessage("You have files in SIP that are not referenced in %1$s",
           metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
         false, false);
     }
@@ -553,7 +557,7 @@ public abstract class FileSecValidator {
         final List<FileType.FLocat> flocat = file.getFLocat();
         if (flocat != null) {
           if (flocat.size() == 1) {
-            final String href = URLDecoder.decode(flocat.get(0).getHref(), Constants.UTF_8);
+            final String href = URLDecoder.decode(DecoderUtils.normalizePath(flocat.get(0).getHref()), StandardCharsets.UTF_8);
             if (href != null) {
               final Long size = file.getSIZE();
               if (size != null) {
@@ -648,6 +652,15 @@ public abstract class FileSecValidator {
    */
   protected ReporterDetails validateCSIP71(final StructureValidatorState structureValidatorState,
     final MetsValidatorState metsValidatorState) throws IOException, NoSuchAlgorithmException {
+
+    boolean skipCalculationChecksum = Boolean.parseBoolean(System.getProperty("skipChecksumCalculation", "false"));
+    if (skipCalculationChecksum) {
+      ReporterDetails details = new ReporterDetails();
+      details.setSkipped(true);
+      details.addIssue("Checksum calculation is disabled");
+      return details;
+    }
+
     final List<String> tmp = new ArrayList<>();
     for (CHECKSUMTYPE check : CHECKSUMTYPE.values()) {
       tmp.add(check.toString());
@@ -685,7 +698,7 @@ public abstract class FileSecValidator {
                     metsValidatorState.getMetsName(), metsValidatorState.isRootMets()),
                   false, false);
               } else {
-                final String filePath = URLDecoder.decode(href, Constants.UTF_8);
+                final String filePath = URLDecoder.decode(DecoderUtils.normalizePath(href), StandardCharsets.UTF_8);
                 if (structureValidatorState.isZipFileFlag()) {
                   final StringBuilder finalPath = new StringBuilder();
                   if (!metsValidatorState.isRootMets()) {
@@ -792,13 +805,13 @@ public abstract class FileSecValidator {
 
     // Get all identifiers for DigiprovMD
     final List<String> amdIds = amdSec.stream().map(AmdSecType::getDigiprovMD).flatMap(List::stream)
-      .filter(dp -> dp.getMdRef() != null).map(dp -> dp.getMdRef().getID()).collect(Collectors.toList());
+      .filter(dp -> dp.getMdRef() != null).map(dp -> dp.getMdRef().getID()).toList();
 
     // Get all file ADMIDs that are NOT in the list of DigiprovMD identifiers
     final List<String> admidsNotInAmd = fileGrps.stream().map(FileGrpType::getFile).flatMap(List::stream)
       .map(FileType::getADMID).flatMap(List::stream).filter(MdSecType.class::isInstance).map(MdSecType.class::cast)
       .filter(md -> md.getMdRef() != null).map(md -> md.getMdRef().getID()).distinct()
-      .filter(admid -> !amdIds.contains(admid)).collect(Collectors.toList());
+      .filter(admid -> !amdIds.contains(admid)).toList();
 
     // Report only valid if all ADMIDs are in DigiprovMD identifiers
     final ReporterDetails r = new ReporterDetails();
@@ -1017,7 +1030,7 @@ public abstract class FileSecValidator {
           for (FileType.FLocat floc : flocat) {
             final String href = floc.getHref();
             if (href != null) {
-              final String hrefDecoded = URLDecoder.decode(href, Constants.UTF_8);
+              final String hrefDecoded = URLDecoder.decode(DecoderUtils.normalizePath(href), StandardCharsets.UTF_8);
               if (structureValidatorState.isZipFileFlag()) {
                 final StringBuilder finalPath = new StringBuilder();
                 if (!metsValidatorState.isRootMets()) {

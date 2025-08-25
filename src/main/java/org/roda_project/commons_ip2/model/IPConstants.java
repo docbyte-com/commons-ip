@@ -46,6 +46,12 @@ public final class IPConstants {
   public static final String DESCRIPTIVE_FOLDER = METADATA_FOLDER + DESCRIPTIVE + METS_PATH_SEPARATOR;
   public static final String PRESERVATION = "preservation";
   public static final String PRESERVATION_FOLDER = METADATA_FOLDER + PRESERVATION + METS_PATH_SEPARATOR;
+  public static final String TECHNICAL = "technical";
+  public static final String TECHNICAL_FOLDER = METADATA_FOLDER + TECHNICAL + METS_PATH_SEPARATOR;
+  public static final String SOURCE = "source";
+  public static final String SOURCE_FOLDER = METADATA_FOLDER + SOURCE + METS_PATH_SEPARATOR;
+  public static final String RIGHTS = "rights";
+  public static final String RIGHTS_FOLDER = METADATA_FOLDER + RIGHTS + METS_PATH_SEPARATOR;
   public static final String OTHER_WITH_FIRST_LETTER_CAPITAL = "Other";
   public static final String OTHER = "other";
   public static final String OTHER_FOLDER = METADATA_FOLDER + OTHER + METS_PATH_SEPARATOR;
@@ -76,6 +82,9 @@ public final class IPConstants {
 
   // SIP Specification
   public static final String SIP_SPEC_PROFILE = "https://earksip.dilcis.eu/profile/E-ARK-SIP.xml";
+
+  // AIP Specification
+  public static final String AIP_SPEC_PROFILE = "https://earkaip.dilcis.eu/profile/E-ARK-AIP.xml";
 
   // RODA
   public static final String RODA_STRUCTURAL_MAP = "RODA structural map";
@@ -120,6 +129,8 @@ public final class IPConstants {
   public static final String SCHEMA_EARK_SIP_FILENAME = "DILCISExtensionSIPMETS.xsd";
   public static final String SCHEMA_EARK_SIP_RELATIVE_PATH_FROM_RESOURCES = METS_PATH_SEPARATOR + SCHEMAS + "2"
     + METS_PATH_SEPARATOR + SCHEMA_EARK_SIP_FILENAME;
+
+  public static final String SIP_FILE_EXTENSION = ".zip";
 
   /** Private empty constructor */
   private IPConstants() {
