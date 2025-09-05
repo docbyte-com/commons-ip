@@ -773,55 +773,56 @@ public class EARKUtils {
 
     protected void processDescriptiveMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
                                               IPRepresentation representation, Path basePath) throws IPException {
-        String metadataType = IPConstants.DESCRIPTIVE;
-        List<MdSecType> dmdSec = metsWrapper.getMets().getDmdSec();
-        for (MdSecType mdSecType : dmdSec) {
-            MdRef mdRef = mdSecType.getMdRef();
-            if (mdRef != null) {
-                String href = Utils.extractedRelativePathFromHref(mdRef);
-                Path filePath = basePath.resolve(href);
-                if (Files.exists(filePath)) {
-                    List<String> fileRelativeFolders = Utils
-                            .getFileRelativeFolders(basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
-
-                    Optional<IPFileInterface> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
-                    if (metadataFile.isPresent()) {
-                        ValidationUtils.addInfo(ip.getValidationReport(),
-                                ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(),
-                                filePath);
-
-                        MetadataType dmdType = new MetadataType(mdRef.getMDTYPE().toUpperCase());
-                        String dmdVersion = null;
-                        try {
-                            dmdVersion = mdRef.getMDTYPEVERSION();
-                            if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
-                                dmdType.setOtherType(mdRef.getOTHERMDTYPE());
-                            }
-                            logger.debug("Metadata type valid: {}", dmdType);
-                        } catch (NullPointerException | IllegalArgumentException e) {
-                            // do nothing and use already defined values for metadataType &
-                            // metadataVersion
-                            logger.debug("Setting metadata type to {}", dmdType);
-                            ValidationUtils.addEntry(ip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
-                                    ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
-                        }
-
-                        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
-                                dmdType, dmdVersion);
-                        descriptiveMetadata.setCreateDate(mdRef.getCREATED());
-                        if (representation == null) {
-                            ip.addDescriptiveMetadata(descriptiveMetadata);
-                        } else {
-                            representation.addDescriptiveMetadata(descriptiveMetadata);
-                        }
-                    }
-                } else {
-                    ValidationUtils.addIssue(ip.getValidationReport(),
-                            ValidationConstants.getMetadataFileNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
-                            ip.getBasePath(), filePath);
-                }
-            }
-        }
+        processMetadata(ip, logger, representation, metsWrapper.getMetadataDiv(), IPConstants.DESCRIPTIVE, basePath);
+//        String metadataType = IPConstants.DESCRIPTIVE;
+//        List<MdSecType> dmdSec = metsWrapper.getMets().getDmdSec();
+//        for (MdSecType mdSecType : dmdSec) {
+//            MdRef mdRef = mdSecType.getMdRef();
+//            if (mdRef != null) {
+//                String href = Utils.extractedRelativePathFromHref(mdRef);
+//                Path filePath = basePath.resolve(href);
+//                if (Files.exists(filePath)) {
+//                    List<String> fileRelativeFolders = Utils
+//                            .getFileRelativeFolders(basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
+//
+//                    Optional<IPFileInterface> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
+//                    if (metadataFile.isPresent()) {
+//                        ValidationUtils.addInfo(ip.getValidationReport(),
+//                                ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(),
+//                                filePath);
+//
+//                        MetadataType dmdType = new MetadataType(mdRef.getMDTYPE().toUpperCase());
+//                        String dmdVersion = null;
+//                        try {
+//                            dmdVersion = mdRef.getMDTYPEVERSION();
+//                            if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
+//                                dmdType.setOtherType(mdRef.getOTHERMDTYPE());
+//                            }
+//                            logger.debug("Metadata type valid: {}", dmdType);
+//                        } catch (NullPointerException | IllegalArgumentException e) {
+//                            // do nothing and use already defined values for metadataType &
+//                            // metadataVersion
+//                            logger.debug("Setting metadata type to {}", dmdType);
+//                            ValidationUtils.addEntry(ip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
+//                                    ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
+//                        }
+//
+//                        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
+//                                dmdType, dmdVersion);
+//                        descriptiveMetadata.setCreateDate(mdRef.getCREATED());
+//                        if (representation == null) {
+//                            ip.addDescriptiveMetadata(descriptiveMetadata);
+//                        } else {
+//                            representation.addDescriptiveMetadata(descriptiveMetadata);
+//                        }
+//                    }
+//                } else {
+//                    ValidationUtils.addIssue(ip.getValidationReport(),
+//                            ValidationConstants.getMetadataFileNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
+//                            ip.getBasePath(), filePath);
+//                }
+//            }
+//        }
     }
 
     protected void processOtherMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,
