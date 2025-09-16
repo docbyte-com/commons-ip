@@ -29,4 +29,16 @@ public class ParseEARKSIPTest {
     Assert.assertEquals(1, first.getTechnicalMetadata().size());
 
   }
+
+
+    @Test
+    public void parseEARKSIPWithProfileTest() throws ParseException {
+        Path earkSIPPath = Paths.get("src/test/resources/ProfileEarkSip.zip");
+
+        SIP sip = new EARKSIP().parse(earkSIPPath);
+
+        Assert.assertEquals(1, sip.getHeader().getAltRecordIDs().size());
+
+
+    }
 }
