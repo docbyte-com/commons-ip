@@ -266,12 +266,6 @@ public class AIPWrap implements AIP {
   }
 
   @Override
-  public IPInterface addRightsMetadataToRepresentation(final String representationID,
-    final IPMetadata rightsMetadata) throws IPException {
-    return aip.addRightsMetadataToRepresentation(representationID, rightsMetadata);
-  }
-
-  @Override
   public IPInterface addOtherMetadataToRepresentation(final String representationID, final IPMetadata otherMetadata)
     throws IPException {
     return aip.addOtherMetadataToRepresentation(representationID, otherMetadata);

@@ -104,9 +104,6 @@ public interface IPInterface {
   IPInterface addRightsMetadataToRepresentation(String representationID, IPMetadata rightsMetadata)
     throws IPException;
 
-  IPInterface addRightsMetadataToRepresentation(String representationID, IPMetadata rightsMetadata)
-    throws IPException;
-
   IPInterface addOtherMetadataToRepresentation(String representationID, IPMetadata otherMetadata) throws IPException;
 
   IPInterface addFileToRepresentation(String representationID, IPFileInterface file) throws IPException;
