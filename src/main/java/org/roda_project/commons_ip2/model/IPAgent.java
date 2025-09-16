@@ -28,8 +28,6 @@ public class IPAgent implements Serializable {
     this.type = CreatorType.OTHER;
     this.otherRole = "";
     this.otherType = "";
-    this.note = "";
-    this.noteType = IPAgentNoteTypeEnum.NOT_SET;
   }
 
   public IPAgent(String name, String role, String otherRole, CreatorType type, String otherType, String note,

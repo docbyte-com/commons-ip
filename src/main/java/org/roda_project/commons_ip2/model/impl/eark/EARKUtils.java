@@ -27,6 +27,7 @@ import org.roda_project.commons_ip.utils.IPEnums.IPStatus;
 import org.roda_project.commons_ip.utils.IPException;
 import org.roda_project.commons_ip.utils.ValidationConstants;
 import org.roda_project.commons_ip.utils.ZipEntryInfo;
+import org.roda_project.commons_ip2.mets_v1_12.beans.AmdSecType;
 import org.roda_project.commons_ip2.mets_v1_12.beans.*;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType.Fptr;
 import org.roda_project.commons_ip2.mets_v1_12.beans.DivType.Mptr;
@@ -801,6 +802,55 @@ public class EARKUtils {
                 }
             }
         }
+  //        String metadataType = IPConstants.DESCRIPTIVE;
+//        List<MdSecType> dmdSec = metsWrapper.getMets().getDmdSec();
+//        for (MdSecType mdSecType : dmdSec) {
+//            MdRef mdRef = mdSecType.getMdRef();
+//            if (mdRef != null) {
+//                String href = Utils.extractedRelativePathFromHref(mdRef);
+//                Path filePath = basePath.resolve(href);
+//                if (Files.exists(filePath)) {
+//                    List<String> fileRelativeFolders = Utils
+//                            .getFileRelativeFolders(basePath.resolve(IPConstants.METADATA).resolve(metadataType), filePath);
+//
+//                    Optional<IPFileInterface> metadataFile = validateMetadataFile(ip, filePath, mdRef, fileRelativeFolders);
+//                    if (metadataFile.isPresent()) {
+//                        ValidationUtils.addInfo(ip.getValidationReport(),
+//                                ValidationConstants.getMetadataFileFoundWithMatchingChecksumString(metadataType), ip.getBasePath(),
+//                                filePath);
+//
+//                        MetadataType dmdType = new MetadataType(mdRef.getMDTYPE().toUpperCase());
+//                        String dmdVersion = null;
+//                        try {
+//                            dmdVersion = mdRef.getMDTYPEVERSION();
+//                            if (StringUtils.isNotBlank(mdRef.getOTHERMDTYPE())) {
+//                                dmdType.setOtherType(mdRef.getOTHERMDTYPE());
+//                            }
+//                            logger.debug("Metadata type valid: {}", dmdType);
+//                        } catch (NullPointerException | IllegalArgumentException e) {
+//                            // do nothing and use already defined values for metadataType &
+//                            // metadataVersion
+//                            logger.debug("Setting metadata type to {}", dmdType);
+//                            ValidationUtils.addEntry(ip.getValidationReport(), ValidationConstants.UNKNOWN_DESCRIPTIVE_METADATA_TYPE,
+//                                    ValidationEntry.LEVEL.WARN, "Setting metadata type to " + dmdType, ip.getBasePath(), filePath);
+//                        }
+//
+//                        IPDescriptiveMetadata descriptiveMetadata = new IPDescriptiveMetadata(mdRef.getID(), metadataFile.get(),
+//                                dmdType, dmdVersion);
+//                        descriptiveMetadata.setCreateDate(mdRef.getCREATED());
+//                        if (representation == null) {
+//                            ip.addDescriptiveMetadata(descriptiveMetadata);
+//                        } else {
+//                            representation.addDescriptiveMetadata(descriptiveMetadata);
+//                        }
+//                    }
+//                } else {
+//                    ValidationUtils.addIssue(ip.getValidationReport(),
+//                            ValidationConstants.getMetadataFileNotFoundString(metadataType), ValidationEntry.LEVEL.ERROR,
+//                            ip.getBasePath(), filePath);
+//                }
+//            }
+//        }
     }
 
     protected void processOtherMetadata(MetsWrapper metsWrapper, IPInterface ip, Logger logger,

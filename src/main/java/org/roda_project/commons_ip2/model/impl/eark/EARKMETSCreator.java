@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import jakarta.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
@@ -51,8 +52,6 @@ import org.roda_project.commons_ip2.utils.ValidationUtils;
 import org.roda_project.commons_ip2.utils.ZIPUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import jakarta.xml.bind.JAXBException;
 
 public abstract class EARKMETSCreator {
   private static final Logger LOGGER = LoggerFactory.getLogger(EARKMETSCreator.class);
@@ -355,10 +354,14 @@ public abstract class EARKMETSCreator {
     agent.setOTHERROLE(ipAgent.getOtherRole());
     agent.setTYPE(ipAgent.getType().toString());
     agent.setOTHERTYPE(ipAgent.getOtherType());
-    final MetsType.MetsHdr.Agent.Note note = new MetsType.MetsHdr.Agent.Note();
-    note.setValue(ipAgent.getNote());
-    note.setNOTETYPE(ipAgent.getNoteType().asString());
-    agent.getNote().add(note);
+
+    if(ipAgent.getNote() != null) {
+      final MetsType.MetsHdr.Agent.Note note = new MetsType.MetsHdr.Agent.Note();
+      note.setValue(ipAgent.getNote());
+      note.setNOTETYPE(ipAgent.getNoteType().asString());
+      agent.getNote().add(note);
+    }
+
     return agent;
   }
 
