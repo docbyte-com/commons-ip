@@ -193,13 +193,13 @@ Note: in Windows, each property and value pair must be enclosed in `"`, example 
 
   ```xml
 <dependency>
-  <groupId>org.roda-project</groupId>
+  <groupId>org.roda-community</groupId>
   <artifactId>commons-ip2</artifactId>
-  <version>2.6.0</version>
+  <version>2.9.3</version>
 </dependency>
   ```
 
-* Not using Maven, use the GitHub packages to (download the dependency)[https://github.com/keeps/commons-ip/packages].
+* Not using Maven? Use the GitHub packages to [download the dependency](https://github.com/keeps/commons-ip/packages).
 
 #### Write some code
 
@@ -266,8 +266,9 @@ SIP sip=new EARKSIP("SIP_1",IPContentType.getMIXED(),IPContentInformationType.ge
         representation2.setStatus(new RepresentationStatus(REPRESENTATION_STATUS_NORMALIZED));
         sip.addRepresentation(representation2);
 
-// 1.10.1) add a file to the representation
+// 1.10.1) add a file to the representation & define the content information type
         IPFile representationFile3=new IPFile(Paths.get("src/test/resources/eark/documentation.pdf"));
+        representationFile3.setContentInformationType(new IPContentInformationType("TIFF"));
         representationFile3.setRenameTo("data3.pdf");
         representation2.addFile(representationFile3);
 

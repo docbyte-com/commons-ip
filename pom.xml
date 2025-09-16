@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.roda-project</groupId>
+    <groupId>org.roda-community</groupId>
     <artifactId>commons-ip2</artifactId>
     <packaging>jar</packaging>
-    <version>2.9.0-SNAPSHOT</version>
-    <name>RODA Commons IP - Library to manipulate Information Packages of different formats: RODA,
-        E-ARK, BagIt,
-        Hungarian SIP 4, etc.
-    </name>
+    <version>2.11.0-SNAPSHOT</version>
+    <name>Commons IP</name>
+    <description>Library to validate and manipulate E-ARK Information Packages, so to create or process E-ARK SIP and AIP and also validate them against official specifications.</description>
+    <url>https://keeps.github.io/commons-ip/</url>
+
+    <licenses>
+        <license>
+            <name>LGPL-3.0</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+            <comments>GNU Lesser General Public License, version 3</comments>
+        </license>
+    </licenses>
 
     <scm>
         <url>https://github.com/keeps/commons-ip</url>
@@ -30,17 +38,25 @@
 
     <developers>
         <developer>
-            <id>hsilva</id>
-            <name>Helder Silva</name>
-            <email>hsilva@keep.pt</email>
+            <id>lfaria</id>
+            <name>Luis Faria</name>
+            <email>lfaria@keep.pt</email>
             <organization>KEEP SOLUTIONS</organization>
             <organizationUrl>https://www.keep.pt</organizationUrl>
             <timezone>0</timezone>
         </developer>
         <developer>
-            <id>jgomes</id>
-            <name>João Gomes</name>
-            <email>jgomes@keep.pt</email>
+            <id>hmiguim</id>
+            <name>Miguel Guimarães</name>
+            <email>mguimaraes@keep.pt</email>
+            <organization>KEEP SOLUTIONS</organization>
+            <organizationUrl>https://www.keep.pt</organizationUrl>
+            <timezone>0</timezone>
+        </developer>
+        <developer>
+            <id>carlosjepard</id>
+            <name>Carlos Afonso</name>
+            <email>cafonso@keep.pt</email>
             <organization>KEEP SOLUTIONS</organization>
             <organizationUrl>https://www.keep.pt</organizationUrl>
             <timezone>0</timezone>
@@ -50,7 +66,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java_version>17</java_version>
-        <version.jackson>2.18.2</version.jackson>
+        <version.jackson>2.18.3</version.jackson>
     </properties>
 
     <profiles>
@@ -136,13 +152,17 @@
                                                 </limit>
                                             </limits>
                                             <excludes>
-                                                <!-- 20180814 hsilva: will not test model entities per se -->
+                                                <!-- 20180814 hsilva: will not test model entities
+                                                per se -->
                                                 <exclude>org.roda_project.commons_ip2.model.*</exclude>
                                                 <!-- 20180814 hsilva: will not test xml beans per se -->
-                                                <exclude>org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
-                                                <!-- 20180814 hsilva: will not test this as it is here for future
+                                                <exclude>
+                                                    org.roda_project.commons_ip2.mets_v1_11.beans.*</exclude>
+                                                <!-- 20180814 hsilva: will not test this as it is
+                                                here for future
                                                     memory -->
-                                                <exclude>org.roda_project.commons_ip2.command_line.Main</exclude>
+                                                <exclude>
+                                                    org.roda_project.commons_ip2.command_line.Main</exclude>
                                                 <!-- 20180814 hsilva: will not test utils per se -->
                                                 <exclude>org.roda_project.commons_ip2.utils.*</exclude>
                                             </excludes>
@@ -316,13 +336,90 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.7.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <configuration>
+                            <source>${java_version}</source>
+                            <target>${java_version}</target>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.11.2</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadoc</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <stylesheet>java</stylesheet>
+                            <doclint>none</doclint>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.7</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencies>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.15</version>
+            <version>1.5.18</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -354,7 +451,7 @@
             <!-- needed for commons-configuration2 -->
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>1.10.0</version>
+            <version>1.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
@@ -371,7 +468,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.13.0</version>
+            <version>2.13.1</version>
         </dependency>
 
         <!-- CLI dependecies -->
@@ -403,7 +500,7 @@
         <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
-            <version>2.15.2</version>
+            <version>2.18.2</version>
         </dependency>
     </dependencies>
 
