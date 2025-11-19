@@ -129,7 +129,10 @@ public final class Utils {
              */
             LOGGER.error("Directory {} is not empty. Going to delete quietly and let janitor to cleanup.", path, e);
         } catch (IOException e) {
-            throw e;
+            /*
+             * In certain cases, delete fails with IOException. Ignore the exception but print the cause, so it can be investigated.*
+             */
+            LOGGER.error("Error while deleting directory {}", path, e);
         }
     }
 
