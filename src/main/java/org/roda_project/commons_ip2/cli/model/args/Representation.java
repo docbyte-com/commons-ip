@@ -8,23 +8,35 @@ import java.util.List;
  * @author Miguel Guimarães <mguimaraes@keep.pt>
  */
 public class Representation {
-  @CommandLine.Option(names = {
-    "--representation-data"}, required = true, split = ",", paramLabel = "<path>", description = "Path to representation file")
-  List<String> representationData;
-  @CommandLine.Option(names = "--representation-type", paramLabel = "<type>", description = "Representation type")
-  String representationType;
-  @CommandLine.Option(names = "--representation-id", paramLabel = "<id>", description = "Representation identifier. If not set a default value of rep<number> will be used")
-  String representationId;
+    @CommandLine.Option(names = {
+            "--representation-data"}, required = true, split = ",", paramLabel = "<path>", description = "Path to representation file")
+    List<String> representationData;
+    @CommandLine.Option(names = "--representation-content-type", paramLabel = "<content-type>", description = "Representation content type")
+    String representationContentType;
+    @CommandLine.Option(names = "--representation-content-information-type", paramLabel = "<content-information-type>", description = "Representation content information type")
+    String representationContentInformationType;
+    @CommandLine.Option(names = "--representation-id", paramLabel = "<id>", description = "Representation identifier. If not set a default value of rep<number> will be used")
+    String representationId;
+    @CommandLine.Option(names = "--representation-status", paramLabel = "<status>", description = "Representation status", defaultValue = "ORIGINAL")
+    String representationStatus;
 
-  public List<String> getRepresentationData() {
-    return representationData;
-  }
+    public List<String> getRepresentationData() {
+        return representationData;
+    }
 
-  public String getRepresentationType() {
-    return representationType;
-  }
+    public String getRepresentationContentType() {
+        return representationContentType;
+    }
 
-  public String getRepresentationId() {
-    return representationId;
-  }
+    public String getRepresentationContentInformationType() {
+        return representationContentInformationType;
+    }
+
+    public String getRepresentationId() {
+        return representationId;
+    }
+
+    public String getRepresentationStatus() {
+        return representationStatus;
+    }
 }
